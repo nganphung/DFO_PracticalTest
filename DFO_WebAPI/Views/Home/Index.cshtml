@@ -1,0 +1,46 @@
+﻿<div id="body" >
+    <h1>List of users</h1>        
+    <ul id="users"></ul>
+    
+    <form id="saveUserForm" method="post">
+        <h3>Create a new User</h3>
+        <p>
+            <label for="userName">User Name:</label>
+            <input type="text" name="Name" required maxlength="50" minlength="1"/> <span style="color:red">*</span>
+        </p>
+        <p>
+            <label for="uesrAge">User Age:</label>
+            <input type="text" name="Age" required/> <span style="color:red">*</span>
+        </p>
+        <p>
+            <label for="uesrAddress">User Address:</label>
+            <input type="text" name="Address" maxlength="50"/>
+        </p>
+       <input type="button" id="saveUser" value="Save" />
+    </form>
+</div>
+
+@section scripts{
+<script type="text/javascript">
+$(function()
+{
+        $.getJSON('/api/user', function(usersJsonPayload)
+        {
+            $(usersJsonPayload).each(function (i, item)
+            {
+                $('#users').append('<li>' + item.Name + '</li>');
+            });
+        });
+});
+
+$('#saveUser').click(function () {
+    $.post("api/user",
+          $("#saveUserForm").serialize(),
+          function (value) {
+              $('#users').append('<li>' + value.Name + '</li>');
+          },
+          "json"
+    );
+});
+</script>
+}
